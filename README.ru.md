@@ -75,4 +75,4 @@ python tests/check_project.py
 
 ## Лицензия
 
-MIT © 2026 Nikolay Krasnov. См. [LICENSE](LICENSE).
+Проект распространяется по лицензии MIT. См. [LICENSE](LICENSE).

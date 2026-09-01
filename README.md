@@ -75,4 +75,4 @@ The project follows [Semantic Versioning](https://semver.org/). Changes are reco
 
 ## License
 
-MIT © 2026 Nikolay Krasnov. See [LICENSE](LICENSE).
+Licensed under the MIT License. See [LICENSE](LICENSE).
