@@ -1,7 +1,7 @@
 ---
 name: prompt-compiler
 description: Compiles a raw user request into a minimal, clear, executable prompt for a target LLM. Use when the user explicitly asks to improve, rewrite, optimize, strengthen, clarify, or "make a proper prompt out of" a request, or invokes the compiler by name. Also use when the user pastes a prompt and asks what is wrong with it. Do NOT use for ordinary task requests, even informal, short, emotional, or grammatically imperfect ones — those are executed directly, not compiled.
-version: 2.0.1
+version: 2.1.0
 author: Nikolay Krasnov (krasn0w), Hermes Agent
 license: MIT
 metadata:

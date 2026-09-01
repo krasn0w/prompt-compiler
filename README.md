@@ -1,76 +1,78 @@
 # Prompt Compiler
 
-Prompt Compiler превращает сырой запрос в минимальный, ясный и исполнимый промпт для целевой языковой модели. Это скилл для [Hermes Agent](https://github.com/NousResearch/hermes-agent), а не отдельное приложение или DSL.
+**English** · [Русский](README.ru.md)
 
-> Текущая версия: **2.0.1** · Лицензия: **MIT** · Язык скилла: **English**, ответы — на языке пользователя.
+Prompt Compiler turns a raw request into a minimal, clear, executable prompt for a target language model. It is a skill for [Hermes Agent](https://github.com/NousResearch/hermes-agent), not a standalone application or DSL.
 
-## Зачем
+> Current version: **2.1.0** · License: **MIT** · Skill language: **English** · Responses follow the user's language.
 
-Скилл сохраняет цель, тон и ограничения пользователя, но устраняет существенную неоднозначность, противоречия и лишний шаблонный шум. Он добавляет контекст, требования к выводу и проверяемые критерии успеха только тогда, когда это повышает исполнимость задачи.
+## Why
 
-Подробное описание: [ANNOTATION.md](ANNOTATION.md).
-Доказательная база: [references/sources.md](references/sources.md).
+The skill preserves the user's goal, tone, and constraints while removing material ambiguity, contradictions, and template noise. It adds context, output requirements, and observable success criteria only when they make the task more executable.
 
-## Основные свойства
+Detailed overview: [ANNOTATION.md](ANNOTATION.md).
+Evidence map: [references/sources.md](references/sources.md).
 
-- **Минимально достаточный промпт:** пустые и очевидные секции не добавляются.
-- **Сохранение намерения:** новые факты, требования и разрешения не выдумываются.
-- **Compile → stop:** по умолчанию скилл формирует промпт, но не выполняет исходную задачу.
-- **No-op допустим:** хороший исходный промпт возвращается без искусственных изменений.
-- **Адаптация по задаче:** код, анализ, творчество, извлечение, исследование, работа инструментами.
-- **Адаптация по модели:** Claude, GPT, Gemini и документированный профиль DeepSeek-R1; неизвестная модель получает переносимый вариант.
-- **Безопасные границы:** внешний контент считается данными, а не доверенной инструкцией.
+## Core properties
 
-## Установка
+- **Minimum sufficient prompt:** empty or obvious sections are omitted.
+- **Intent preservation:** no invented facts, requirements, preferences, or permissions.
+- **Compile → stop:** by default, the skill compiles the prompt but does not execute the underlying task.
+- **No-op is valid:** an already sufficient prompt is returned unchanged.
+- **Task adaptation:** code, analysis, creative work, extraction, research, and tool-using agents.
+- **Model adaptation:** Claude, GPT, Gemini, and a documented DeepSeek-R1 profile; unknown models receive a portable prompt.
+- **Safety boundaries:** external content is treated as data, not as trusted instructions.
 
-Скопируйте папку проекта в каталог пользовательских скиллов Hermes:
+## Installation
+
+Copy the project directory into your Hermes user skills directory:
 
 ```text
 %LOCALAPPDATA%\hermes\skills\software-development\prompt-compiler\
 ```
 
-На Linux/macOS используется `$HERMES_HOME/skills/software-development/prompt-compiler/` или `~/.hermes/skills/software-development/prompt-compiler/`.
+On Linux/macOS, use `$HERMES_HOME/skills/software-development/prompt-compiler/` or `~/.hermes/skills/software-development/prompt-compiler/`.
 
-Для работы нужен только `SKILL.md`. Остальные файлы — документация, источники и проверки проекта.
+Only `SKILL.md` is required at runtime. The other files provide documentation, evidence, and project checks.
 
-## Использование
+## Usage
 
-Упомяните скилл явно или попросите улучшить промпт:
+Invoke the skill by name or explicitly ask to improve a prompt:
 
 ```text
-Используй prompt-compiler и преврати этот запрос в точный промпт: ...
+Use prompt-compiler and turn this request into a precise prompt: ...
 ```
 
-По умолчанию ответ содержит готовый промпт, краткий список изменений и только существенные допущения. Чтобы сразу выполнить задачу, попросите явно: «улучши промпт и выполни его».
+By default, the response contains a copy-ready prompt, a short list of material changes, and only relevant assumptions. To run the underlying task immediately, explicitly ask: “improve the prompt and execute it.”
 
-## Как работает
+## How it works
 
-1. Определяет основную цель и тип задачи.
-2. Сохраняет уже достаточные детали и голос пользователя.
-3. Находит только существенные пробелы и противоречия.
-4. Добавляет минимально необходимые секции: `Goal`, `Context`, `Inputs`, `Requirements`, `Output`, `Success criteria`.
-5. Учитывает тип задачи и известное семейство модели.
-6. Убирает повторения, карго-культ и непроверяемые требования.
-7. Возвращает готовый промпт и останавливается.
+1. Identifies the primary goal and task type.
+2. Preserves sufficient detail and the user's voice.
+3. Finds only material gaps and contradictions.
+4. Adds only necessary sections: `Goal`, `Context`, `Inputs`, `Requirements`, `Output`, `Success criteria`.
+5. Adapts to the task and known model family.
+6. Removes repetition, cargo-cult prompting, and unverifiable requirements.
+7. Returns the compiled prompt and stops.
 
-## Доказательная база
+## Evidence base
 
-Правила опираются на официальную документацию Anthropic, OpenAI, Google и DeepSeek, исследования длинного контекста, самокоррекции и форматных ограничений, а также рекомендации OWASP по prompt injection. Источники разделены по доказательной силе; собственные архитектурные решения проекта помечены отдельно.
+The rules draw on official Anthropic, OpenAI, Google, and DeepSeek documentation; research on long context, self-correction, and constrained output; and OWASP guidance on prompt injection. Sources are classified by evidence strength, while the project's own architectural choices are labeled separately.
 
-Проект **не обещает универсального прироста качества**. Реальный эффект зависит от модели и задачи и должен проверяться на собственном наборе запросов.
+The project **does not promise a universal quality gain**. Effects depend on the model and task and should be tested on a representative prompt set.
 
-## Проверка проекта
+## Project checks
 
 ```bash
 python tests/check_project.py
 ```
 
-Проверка не вызывает LLM и не требует зависимостей: валидирует структуру frontmatter, версию, обязательные разделы, локальные ссылки и отсутствие известных неподтверждённых формулировок.
+The check makes no LLM calls and has no third-party dependencies. It validates frontmatter, version consistency, required files and sections, local links, language navigation, and the absence of known unsupported legacy claims.
 
-## Версионирование
+## Versioning
 
-Проект использует [Semantic Versioning](https://semver.org/). Изменения фиксируются в [CHANGELOG.md](CHANGELOG.md); прошлые версии сохраняются Git-тегами.
+The project follows [Semantic Versioning](https://semver.org/). Changes are recorded in [CHANGELOG.md](CHANGELOG.md), and published releases are preserved as Git tags.
 
-## Лицензия
+## License
 
-MIT © 2026 Nikolay Krasnov. См. [LICENSE](LICENSE).
+MIT © 2026 Nikolay Krasnov. See [LICENSE](LICENSE).

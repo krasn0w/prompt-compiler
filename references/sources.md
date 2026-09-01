@@ -1,108 +1,108 @@
-# Источники и доказательная база Prompt Compiler
+# Prompt Compiler sources and evidence map
 
-Проверено: **2026-09-01**.
+**English** · [Русский](sources.ru.md)
 
-Этот файл связывает ключевые решения `Prompt Compiler` с официальной документацией, публикациями авторов исследований и отраслевыми руководствами. Он не утверждает, что одна техника одинаково улучшает все модели и задачи. Вендорская документация описывает рекомендуемое использование конкретных семейств моделей; академические и индустриальные исследования ограничены своими моделями, датасетами и методиками. Частные исследовательские заметки автора использовались как карта тем, но не публикуются и не считаются самостоятельным доказательством.
+Last checked: **2026-09-01**.
 
-## Как читать статусы
+This document links Prompt Compiler's key design choices to official model documentation, papers by the researchers, and industry security guidance. It does not claim that one technique improves every model and task. Vendor documentation describes particular model families; academic and industry studies remain bounded by their models, datasets, and methods. The author's private exploratory notes were used as a topic map but are neither published nor treated as evidence.
 
-- **Официальная документация** — рекомендация или описание поведения от разработчика модели.
-- **Исследование** — работа с опубликованной методикой и результатами; переносимость за пределы эксперимента не предполагается автоматически.
-- **Проектное решение** — сознательная архитектурная политика Prompt Compiler, выведенная из нескольких источников и требований проекта.
-- **Требует перепроверки** — утверждение из исходного исследования, которое не следует публиковать как доказанный факт без отдельной верификации.
+## Evidence labels
 
-## Карта утверждений
+- **Official documentation** — guidance or behavior documented by the model developer.
+- **Research** — a work with a published method and results; transfer beyond the experiment is not assumed.
+- **Project decision** — an explicit Prompt Compiler policy derived from multiple sources and project requirements.
+- **Needs revalidation** — a claim from exploratory work that must not be presented as established without separate verification.
+
+## Claim map
 
 <a id="src-clear-specific"></a>
 ### [src:clear-specific]
 
-**Поддерживает:** ясная цель, релевантный контекст, явные ограничения и формат результата; минимум шаблонного раздувания.
+**Supports:** a clear goal, relevant context, explicit constraints, and an output contract, with minimal template inflation.
 
-- Anthropic рекомендует ясные и прямые инструкции, конкретный формат и ограничения, а также объяснение контекста и мотивации.
-- Google рекомендует ясные и конкретные инструкции, ограничения и формат ответа.
-- OpenAI определяет промпт-инжиниринг как создание инструкций, которые стабильно приводят к требованиям, и советует строить тесты для контроля поведения.
+Anthropic recommends clear, direct instructions, explicit formats and constraints, and relevant context. Google recommends clear and specific instructions, constraints, and response formats. OpenAI describes prompt engineering as writing instructions that reliably produce the required behavior and recommends evaluations to monitor that behavior.
 
-**Статус:** официальная документация; согласованная рекомендация нескольких вендоров.
+**Status:** official documentation; convergent guidance from several vendors.
 
-**Источники:**
+**Sources:**
 - [Anthropic — Prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices)
 - [Google — Prompt design strategies](https://ai.google.dev/gemini-api/docs/prompting-strategies)
 - [OpenAI — Prompt engineering](https://platform.openai.com/docs/guides/prompt-engineering)
 
 ### [src:success-criteria-evals]
 
-**Поддерживает:** критерии успеха должны быть наблюдаемыми; проверка полезна, когда существует реальный внешний сигнал.
+**Supports:** success criteria should be observable, and verification is useful when a real external signal exists.
 
-Anthropic ставит ясное определение критериев успеха и способ эмпирической проверки перед собственно оптимизацией промпта. OpenAI рекомендует фиксировать модели и поддерживать тесты/наборы оценок при изменении промптов или версий моделей.
+Anthropic places a clear definition of success criteria and a way to test them before prompt optimization. OpenAI recommends pinning model versions and maintaining evaluations when prompts or model versions change.
 
-**Статус:** официальная документация; проектное решение — не добавлять расплывчатую «самопроверку», если результат нельзя проверить.
+**Status:** official documentation; project decision not to add vague “self-checking” when the result cannot be checked.
 
-**Источники:**
+**Sources:**
 - [Anthropic — Prompt engineering overview](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview)
 - [OpenAI — Prompt engineering](https://platform.openai.com/docs/guides/prompt-engineering)
 
 ### [src:structure-delimiters]
 
-**Поддерживает:** отделение инструкций, контекста, примеров и входных данных с помощью Markdown или XML; использование структуры только по необходимости.
+**Supports:** separating instructions, context, examples, and input data with Markdown or XML, using structure only when needed.
 
-Anthropic пишет, что XML-теги помогают Claude однозначно разбирать сложные промпты. OpenAI рекомендует Markdown и XML для обозначения логических границ между инструкциями и контекстными данными. Это подтверждает разделение `Goal / Context / Inputs / Requirements / Output / Success criteria`, но не доказывает, что все шесть секций нужны в каждом запросе.
+Anthropic states that XML tags help Claude parse complex prompts unambiguously. OpenAI recommends Markdown and XML to mark logical boundaries between instructions and contextual data. This supports the available `Goal / Context / Inputs / Requirements / Output / Success criteria` sections, but not requiring all six in every prompt.
 
-**Статус:** официальная документация; проектное решение — пустые и очевидные секции удаляются.
+**Status:** official documentation; omitting empty and obvious sections is a project decision.
 
-**Источники:**
+**Sources:**
 - [Anthropic — Prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices)
 - [OpenAI — Prompt engineering](https://platform.openai.com/docs/guides/prompt-engineering)
 
 ### [src:examples]
 
-**Поддерживает:** few-shot-примеры добавляются только когда они действительно уточняют формат, тон или поведение, и должны соответствовать реальной задаче.
+**Supports:** adding few-shot examples only when they materially specify format, tone, or behavior, and keeping them representative of the real task.
 
-Anthropic называет несколько качественных примеров одним из наиболее надёжных способов управлять форматом, тоном и структурой. Google описывает zero-shot и few-shot prompting и показывает примеры задания паттерна ответа.
+Anthropic describes a small set of high-quality examples as a reliable way to control format, tone, and structure. Google documents zero-shot and few-shot prompting and demonstrates examples as response-pattern specifications.
 
-**Статус:** официальная документация; применимость зависит от семейства модели и задачи.
+**Status:** official documentation; applicability depends on model family and task.
 
-**Источники:**
+**Sources:**
 - [Anthropic — Prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices)
 - [Google — Prompt design strategies](https://ai.google.dev/gemini-api/docs/prompting-strategies)
 
 <a id="src-long-context-placement"></a>
 ### [src:long-context-placement]
 
-**Поддерживает:** при длинных входных материалах сначала размещать документы/данные, а вопрос и инструкцию — после них; сохранять только релевантный контекст.
+**Supports:** placing long documents or data before the question and instruction, while retaining only relevant context.
 
-Anthropic прямо рекомендует при больших документах размещать длинные данные выше запроса и инструкций. Работа *Lost in the Middle* показывает, что производительность часто выше, когда релевантная информация расположена в начале или конце длинного контекста, и хуже при доступе к середине. Chroma в контролируемых экспериментах на 18 моделях наблюдала неравномерную деградацию качества с ростом длины входа.
+Anthropic explicitly recommends placing long-form data above queries and instructions for large inputs. *Lost in the Middle* reports that performance is often strongest when relevant information occurs near the beginning or end of a long context and weaker when it is in the middle. Chroma's controlled experiments across 18 models report uneven quality degradation as input length grows.
 
-**Статус:** официальная документация + исследования. Порог «примерно 2k токенов» в скилле является практической эвристикой проекта, а не установленной научной границей.
+**Status:** official documentation plus research. The skill's roughly 2k-token threshold is a project heuristic, not a scientifically established boundary.
 
-**Источники:**
+**Sources:**
 - [Anthropic — Prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices)
 - [Liu et al. — Lost in the Middle: How Language Models Use Long Contexts](https://arxiv.org/abs/2307.03172)
-- [Chroma Research — Context Rot: How Increasing Input Tokens Impacts LLM Performance](https://trychroma.com/research/context-rot) — индустриальный исследовательский отчёт авторов эксперимента с опубликованным кодом, не рецензированная академическая статья.
+- [Chroma Research — Context Rot: How Increasing Input Tokens Impacts LLM Performance](https://trychroma.com/research/context-rot) — an industry research report with published code, not a peer-reviewed paper.
 
 <a id="src-reasoning-high-level"></a>
 ### [src:reasoning-high-level]
 
-**Поддерживает:** reasoning-моделям задаётся ясная цель, ограничения и контракт результата без навязывания подробной внутренней последовательности шагов.
+**Supports:** giving reasoning models a clear goal, constraints, and output contract without prescribing a detailed private sequence of intermediate steps.
 
-OpenAI пишет, что reasoning-модели обычно лучше работают с высокоуровневым руководством, и рекомендует ясную цель, сильные ограничения и явный контракт результата без предписывания каждого промежуточного шага.
+OpenAI states that reasoning models generally work better with high-level guidance and recommends a clear goal, strong constraints, and an explicit output contract instead of prescribing every intermediate step.
 
-**Статус:** официальная документация OpenAI; перенос на другие семейства применяется осторожно и только при наличии их собственной документации.
+**Status:** official OpenAI documentation; transfer to other model families requires their own documentation.
 
-**Источники:**
+**Sources:**
 - [OpenAI — Reasoning models](https://platform.openai.com/docs/guides/reasoning)
 - [OpenAI — Prompt engineering](https://platform.openai.com/docs/guides/prompt-engineering)
 
 ### [src:model-specific]
 
-**Поддерживает:** вендорные настройки используются только при известной модели; неизвестная модель получает переносимый вариант без специфических параметров.
+**Supports:** applying vendor-specific settings only to a known target model and using a portable profile otherwise.
 
-OpenAI различает prompting reasoning- и GPT-моделей. Anthropic документирует XML, long-context placement, adaptive thinking и отказ от prefill для новых Claude. Google отдельно описывает общие стратегии и параметры thinking для Gemini 3. Репозиторий DeepSeek-R1 содержит рекомендации по запуску и параметры собственной оценки.
+OpenAI distinguishes prompting for reasoning and GPT models. Anthropic documents XML, long-context placement, adaptive thinking, and the removal of assistant prefill for newer Claude releases. Google separately documents general strategies and Gemini 3 thinking parameters. The DeepSeek-R1 repository documents usage recommendations and evaluation settings for that model.
 
-**Исправление v2.0.1:** из профиля DeepSeek удалены неподтверждённые общие запреты few-shot и chain-of-thought instructions. Рекомендации ограничены документированным DeepSeek-R1 и не переносятся автоматически на другие модели семейства.
+**Correction in v2.0.1:** unsupported general prohibitions on few-shot and chain-of-thought instructions were removed from the DeepSeek profile. The remaining guidance is limited to documented DeepSeek-R1 behavior and is not transferred automatically to other models.
 
-**Статус:** официальная документация; конкретные версии и параметры быстро устаревают и должны перепроверяться перед релизом.
+**Status:** official documentation; version-specific recommendations age quickly and should be rechecked before release.
 
-**Источники:**
+**Sources:**
 - [OpenAI — Prompt engineering](https://platform.openai.com/docs/guides/prompt-engineering)
 - [Anthropic — Prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices)
 - [Google — Gemini 3 developer guide](https://ai.google.dev/gemini-api/docs/gemini-3)
@@ -111,82 +111,82 @@ OpenAI различает prompting reasoning- и GPT-моделей. Anthropic 
 <a id="src-self-correction"></a>
 ### [src:self-correction]
 
-**Поддерживает:** не считать самокритику без внешней обратной связи надёжной проверкой; предпочитать тесты, исполнение, инструменты или эталон.
+**Supports:** not treating self-critique without external feedback as reliable verification; preferring tests, execution, tools, or ground truth.
 
-Huang et al. исследуют внутреннюю самокоррекцию рассуждений без внешней обратной связи и показывают, что модели испытывают трудности и иногда ухудшают ответы после самокоррекции. Вывод не запрещает итеративное улучшение с внешним сигналом и не доказывает бесполезность любой рефлексии на всех современных моделях.
+Huang et al. study intrinsic reasoning self-correction without external feedback and report that models struggle with it and can degrade answers after self-correction. This does not prohibit iterative improvement with an external signal and does not establish that all reflection is useless on every current model.
 
-**Статус:** исследование; формулировка в скилле намеренно ограничена отсутствием внешнего сигнала.
+**Status:** research; the skill deliberately limits the claim to the absence of an external signal.
 
-**Источник:**
+**Source:**
 - [Huang et al. — Large Language Models Cannot Self-Correct Reasoning Yet](https://arxiv.org/abs/2310.01798)
 
 ### [src:structured-reasoning]
 
-**Поддерживает:** жёсткие ограничения формата не следует автоматически накладывать на сам процесс сложного рассуждения; когда это существенно, рассуждение и финальное форматирование разводятся по этапам.
+**Supports:** avoiding automatic rigid formatting constraints on the process of complex reasoning and separating solving from final formatting when the trade-off matters.
 
-Tam et al. сравнивают свободную и ограниченную генерацию и наблюдают снижение качества рассуждения при форматных ограничениях, причём более строгие ограничения обычно давали большую деградацию. Это не означает, что Structured Outputs или JSON вредны для извлечения данных: риск относится к задачам, где форматное ограничение конкурирует со сложным рассуждением.
+Tam et al. compare free and constrained generation and report reduced reasoning quality under format constraints, with stricter constraints generally producing greater degradation. This does not mean Structured Outputs or JSON are harmful for extraction; the risk concerns tasks where format constraints compete with complex reasoning.
 
-**Исправление v2.0.1:** неподтверждённое решение с полем `reasoning` удалено. Скилл рекомендует отделять решение задачи от финального форматирования и, когда нужно, запрашивать краткое проверяемое обоснование вместо внутренней цепочки рассуждений.
+**Correction in v2.0.1:** the unsupported `reasoning`-field workaround was removed. The skill recommends separating task solving from final formatting and, when useful, requesting a concise, verifiable rationale instead of private chain-of-thought.
 
-**Статус:** исследование; проектное решение — использовать разделение этапов только когда задача действительно требует и рассуждения, и строгой структуры.
+**Status:** research; stage separation is a project decision used only when a task genuinely needs both reasoning and strict structure.
 
-**Источник:**
+**Source:**
 - [Tam et al. — Let Me Speak Freely?](https://arxiv.org/abs/2408.02442)
 
 ### [src:prompt-injection]
 
-**Поддерживает:** документы, веб-страницы, выводы инструментов и цитаты трактуются как данные, а не как новые доверенные инструкции; переписывание промпта не обещает полной защиты от prompt injection.
+**Supports:** treating documents, web pages, tool output, and quotations as data rather than new trusted instructions, without claiming that prompt rewriting fully prevents prompt injection.
 
-OWASP описывает прямые и непрямые prompt injection, отмечает отсутствие гарантированного метода предотвращения и рекомендует отделять недоверенный внешний контент, ограничивать привилегии и требовать подтверждение высокорисковых действий.
+OWASP describes direct and indirect prompt injection, notes the absence of guaranteed prevention, and recommends separating untrusted external content, limiting privileges, and requiring confirmation for high-risk actions.
 
-**Статус:** отраслевое руководство по безопасности; не экспериментальная оценка эффективности каждой меры; проектное решение.
+**Status:** industry security guidance, not an experimental evaluation of every mitigation; project decision.
 
-**Источник:**
+**Source:**
 - [OWASP — LLM01:2025 Prompt Injection](https://genai.owasp.org/llmrisk/llm01-prompt-injection/)
 
 ### [src:no-cargo-cult]
 
-**Поддерживает:** не добавлять чаевые, угрозы и подобные эмоциональные «усилители» как универсальную технику улучшения промпта.
+**Supports:** not adding tips, threats, and similar emotional amplifiers as a universal prompt-improvement technique.
 
-Meincke et al. проверяли угрозы и обещания чаевых на GPQA Diamond и подвыборке MMLU-Pro. В среднем они не дали устойчивого значимого улучшения, хотя отдельные вопросы были чувствительны к формулировке. Это поддерживает удаление таких приёмов как ненадёжного карго-культа, но не утверждение, что формулировка промпта вообще не влияет на результат.
+Meincke et al. tested threats and promised tips on GPQA Diamond and a subset of MMLU-Pro. They found no consistent significant average improvement, although individual questions were sensitive to wording. This supports removing those techniques as unreliable cargo cult; it does not imply that prompt wording never affects results.
 
-**Статус:** исследование.
+**Status:** research.
 
-**Источник:**
+**Source:**
 - [Meincke et al. — Prompting Science Report 3: I'll pay you or I'll kill you — but will you care?](https://arxiv.org/abs/2508.00614)
 
-## Проектные решения, не являющиеся научными результатами
+## Project decisions, not scientific findings
 
-Следующие правила полезны для управляемости Prompt Compiler, но не заявляются как доказанные универсальные оптимумы:
+The following rules improve Prompt Compiler's controllability but are not presented as proven universal optima:
 
-1. **Compile → stop.** Сначала вернуть скомпилированный промпт, а исходную задачу выполнять только по явному запросу.
-2. **Один уточняющий вопрос.** Если критическая неоднозначность блокирует корректный результат, задать один прямой вопрос; иначе сделать обратимое допущение и назвать его.
-3. **Минимально достаточная структура.** Шесть секций — доступный набор, а не обязательный шаблон.
-4. **No-op допустим.** Уже достаточный промпт возвращается без искусственных изменений.
-5. **Классификация по типу задачи.** Code / analysis / creative / extraction / research / agentic — рабочая маршрутизация проекта, а не научная таксономия.
-6. **Порог длинного материала.** Значение около 2k токенов — эвристика для выбора порядка блоков, не доказанная граница.
-7. **Нефункциональные персоны.** Отказ от заявлений вроде «эксперт с IQ 200» — политика минимализма проекта. Ролевые инструкции как средство задания тона или области не запрещаются: Anthropic прямо рекомендует роль для фокусировки поведения и тона.
-8. **Управление агентной задачей.** Бюджет вызовов, критерии остановки, разные пороги подтверждения, краткая преамбула, долговечные заметки и compaction — проектные средства управляемости. Они применяются по необходимости и только при поддержке целевого runtime; это не универсальные свойства качественного промпта.
+1. **Compile → stop.** Return the compiled prompt first; execute the underlying task only when explicitly requested.
+2. **One clarification question.** Ask one direct question when critical ambiguity blocks a correct result; otherwise make and report a reversible assumption.
+3. **Minimum sufficient structure.** The six sections are an available set, not a mandatory template.
+4. **No-op is valid.** Return an already sufficient prompt without manufactured changes.
+5. **Task classification.** Code / analysis / creative / extraction / research / agentic is project routing, not a scientific taxonomy.
+6. **Long-material threshold.** Roughly 2k tokens is a placement heuristic, not a proven boundary.
+7. **Non-functional personas.** Rejecting claims such as “expert with IQ 200” is a minimalism policy. Roles that set domain or tone remain valid; Anthropic explicitly recommends role prompting for focus and tone.
+8. **Agent-task control.** Call budgets, stop criteria, confirmation thresholds, preambles, durable notes, and compaction are runtime-dependent project controls, not universal properties of a good prompt.
 
-## Утверждения исходного исследования, которые нельзя переносить без новой проверки
+## Claims that require revalidation
 
-Ниже перечислены положения из локального исследовательского материала, которые намеренно не используются как опубликованные факты:
+The following exploratory claims are intentionally not used as published facts:
 
-- точные проценты улучшения от «leaner system prompts» для GPT-5.6 без доступного первичного отчёта с методикой;
-- запрет `few-shot` для DeepSeek-R1 без подтверждения первичным источником; рекомендацию не использовать system prompt можно относить только к той версии R1, для которой она документирована, но не ко всем похожим моделям;
-- конкретные советы для ещё не проверенных версий моделей по аналогии с соседними версиями;
-- утверждение, что reasoning-поле перед data-полями всегда снимает «налог формата»;
-- любые численные приросты автооптимизаторов без воспроизведения на собственном наборе задач Prompt Compiler;
-- обещание одинакового прироста качества «для любого промпта».
+- exact percentage gains from “leaner system prompts” for GPT-5.6 without an accessible primary report and method;
+- a general few-shot prohibition for DeepSeek-R1; the documented system-prompt recommendation applies only to the relevant R1 version, not all similar models;
+- recommendations for unverified model versions by analogy with adjacent releases;
+- the claim that placing a `reasoning` field before data fields always removes the format penalty;
+- numerical gains from automatic prompt optimizers without reproducing them on Prompt Compiler's own task set;
+- a promise of equal quality improvement for every prompt.
 
-Перед публикацией такие формулировки следует либо удалить, либо снабдить точной ссылкой на первичный источник и ограничениями применимости.
+Before publication, such claims must either be removed or accompanied by a precise primary source and applicability limits.
 
-## Правило обновления
+## Update rule
 
-При изменении модельных профилей:
+When changing model profiles:
 
-1. проверить живую официальную документацию конкретного семейства;
-2. записать дату проверки;
-3. отделить рекомендацию вендора от собственного опыта;
-4. не переносить поведение одной версии или модели на другую без источника;
-5. не заявлять прирост качества до воспроизводимой оценки на зафиксированном наборе запросов.
+1. check the live official documentation for the exact model family;
+2. record the verification date;
+3. separate vendor guidance from project experience;
+4. do not transfer one model or version's behavior to another without a source;
+5. do not claim quality gains without a reproducible evaluation on a fixed prompt set.

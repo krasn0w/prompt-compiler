@@ -8,14 +8,18 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SKILL = ROOT / "SKILL.md"
-VERSION = "2.0.1"
+VERSION = "2.1.0"
 REQUIRED_FILES = [
     "SKILL.md",
     "README.md",
+    "README.ru.md",
     "ANNOTATION.md",
+    "ANNOTATION.ru.md",
     "CHANGELOG.md",
+    "CHANGELOG.ru.md",
     "LICENSE",
     "references/sources.md",
+    "references/sources.ru.md",
 ]
 
 
@@ -93,8 +97,26 @@ def main() -> int:
             check_local_links(path)
 
     annotation = (ROOT / "ANNOTATION.md").read_text(encoding="utf-8")
-    if "v2.0.1" not in annotation:
+    if f"v{VERSION}" not in annotation:
         fail("annotation version is stale")
+
+    russian_annotation = (ROOT / "ANNOTATION.ru.md").read_text(encoding="utf-8")
+    if f"v{VERSION}" not in russian_annotation:
+        fail("Russian annotation version is stale")
+
+    language_pairs = [
+        ("README.md", "README.ru.md", "Русский", "English"),
+        ("ANNOTATION.md", "ANNOTATION.ru.md", "Русский", "English"),
+        ("CHANGELOG.md", "CHANGELOG.ru.md", "Русский", "English"),
+        ("references/sources.md", "references/sources.ru.md", "Русский", "English"),
+    ]
+    for english, russian, russian_label, english_label in language_pairs:
+        english_text = (ROOT / english).read_text(encoding="utf-8")
+        russian_text = (ROOT / russian).read_text(encoding="utf-8")
+        if Path(russian).name not in english_text or russian_label not in english_text:
+            fail(f"missing Russian navigation in {english}")
+        if Path(english).name not in russian_text or english_label not in russian_text:
+            fail(f"missing English navigation in {russian}")
 
     print(f"OK: Prompt Compiler {VERSION} publication checks passed")
     return 0
