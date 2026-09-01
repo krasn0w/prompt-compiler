@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+compass_artifact_wf-26df186e-33dc-502f-b9dd-3ec0a7e4a2fa_text_markdown.md
+research/
