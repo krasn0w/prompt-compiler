@@ -4,7 +4,7 @@
 
 Prompt Compiler turns a raw request into a minimal, clear, executable prompt for a target language model. It is a skill for [Hermes Agent](https://github.com/NousResearch/hermes-agent), not a standalone application or DSL.
 
-> Current version: **2.1.0** · License: **MIT** · Skill language: **English** · Responses follow the user's language.
+> Current version: **3.0.0** · License: **MIT** · Skill language: **English** · Responses follow the user's language.
 
 ## Why
 
@@ -17,10 +17,11 @@ Evidence map: [references/sources.md](references/sources.md).
 
 - **Minimum sufficient prompt:** empty or obvious sections are omitted.
 - **Intent preservation:** no invented facts, requirements, preferences, or permissions.
+- **Explicit action level:** the compiled prompt says whether the target should report, plan, or change something; agentic prompts get a finish line and a stop policy.
 - **Compile → stop:** by default, the skill compiles the prompt but does not execute the underlying task.
 - **No-op is valid:** an already sufficient prompt is returned unchanged.
 - **Task adaptation:** code, analysis, creative work, extraction, research, and tool-using agents.
-- **Model adaptation:** Claude, GPT, Gemini, and a documented DeepSeek-R1 profile; unknown models receive a portable prompt.
+- **Model adaptation:** profiles for Claude 5.x, OpenAI GPT-6 and GPT-5.6, Gemini 3.x, and DeepSeek V4 (plus legacy R1) are loaded on demand from `references/models/`; unknown models receive a portable prompt.
 - **Safety boundaries:** external content is treated as data, not as trusted instructions.
 
 ## Installation
@@ -33,7 +34,7 @@ Copy the project directory into your Hermes user skills directory:
 
 On Linux/macOS, use `$HERMES_HOME/skills/software-development/prompt-compiler/` or `~/.hermes/skills/software-development/prompt-compiler/`.
 
-Only `SKILL.md` is required at runtime. The other files provide documentation, evidence, and project checks.
+At runtime the skill needs `SKILL.md` and the `references/models/` directory, so copy the whole project directory. The other files provide documentation, evidence, and project checks.
 
 ## Usage
 
@@ -43,15 +44,15 @@ Invoke the skill by name or explicitly ask to improve a prompt:
 Use prompt-compiler and turn this request into a precise prompt: ...
 ```
 
-By default, the response contains a copy-ready prompt, a short list of material changes, and only relevant assumptions. To run the underlying task immediately, explicitly ask: “improve the prompt and execute it.”
+By default, the response contains a copy-ready prompt, a short list of material changes, only relevant assumptions, and, when the target model is known, an optional note on runtime parameters. To run the underlying task immediately, explicitly ask: “improve the prompt and execute it.”
 
 ## How it works
 
-1. Identifies the primary goal and task type.
+1. Identifies the primary goal, task type, and action level.
 2. Preserves sufficient detail and the user's voice.
 3. Finds only material gaps and contradictions.
-4. Adds only necessary sections: `Goal`, `Context`, `Inputs`, `Requirements`, `Output`, `Success criteria`.
-5. Adapts to the task and known model family.
+4. Adds only necessary sections: `Goal`, `Context`, `Inputs`, `Requirements`, `Autonomy`, `Output`, `Success criteria`.
+5. Adapts to the task and loads the profile of a known model family.
 6. Removes repetition, cargo-cult prompting, and unverifiable requirements.
 7. Returns the compiled prompt and stops.
 
@@ -67,7 +68,9 @@ The project **does not promise a universal quality gain**. Effects depend on the
 python tests/check_project.py
 ```
 
-The check makes no LLM calls and has no third-party dependencies. It validates frontmatter, version consistency, required files and sections, local links, language navigation, and the absence of known unsupported legacy claims.
+The check makes no LLM calls and has no third-party dependencies. It validates frontmatter, description length, version consistency, required files and sections, model profiles, local links, language navigation, and the absence of known unsupported legacy claims.
+
+A fixed set of regression cases for manual or agent-run evaluation lives in [tests/regression/cases.md](tests/regression/cases.md).
 
 ## Versioning
 
